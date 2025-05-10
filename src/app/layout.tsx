@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: 'ΣΤΑΣΙΣ UFRRJ - Grupo de Estudos em Filosofia',
   description: 'Página do Grupo de Estudos em Filosofia ΣΤΑΣΙΣ da UFRRJ. Eventos, postagens e publicações.',
   icons: {
-    icon: '/greek.svg', // Placeholder, actual favicon not generated
+    icon: '/greek.svg',
   }
 };
 
