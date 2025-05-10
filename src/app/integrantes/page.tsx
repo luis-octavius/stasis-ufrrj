@@ -25,7 +25,7 @@ export default function IntegrantesPage() {
           Nossos Integrantes
         </h1>
         <p className="text-lg text-foreground/80 max-w-2xl mx-auto px-4">
-          Conheça a equipe que compõe o Grupo de Estudos em Filosofia ΣΤΑΣΙΣ.
+          Conheça a equipe que compõe o ΣΤΑΣΙΣ
         </p>
       </section>
       

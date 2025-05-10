@@ -44,9 +44,9 @@ export default function Footer() {
         <p className="text-sm text-primary-foreground/70">
           &copy; {currentYear} Stásis UFRRJ. Todos os direitos reservados.
         </p>
-         <p className="text-xs mt-2 text-primary-foreground/60">
+         {/* <p className="text-xs mt-2 text-primary-foreground/60">
           Design inspirado na cerâmica grega antiga e na busca pela sabedoria.
-        </p>
+        </p> */}
       </div>
     </footer>
   );
