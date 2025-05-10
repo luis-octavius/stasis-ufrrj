@@ -46,28 +46,28 @@ export const mockPosts: Post[] = [
 export const mockMembers: Member[] = [
   {
     id: '1',
-    name: 'Prof. Dr. Platão Azevedo',
+    name: 'Platão',
     role: 'Coordenador',
     imageUrl: 'https://picsum.photos/seed/plataoCoordenador/300/300',
     bio: 'Especialista em Filosofia Antiga e Metafísica. Fundador do grupo Stásis.',
   },
   {
     id: '2',
-    name: 'Msc. Aristóteles Mendes',
-    role: 'Pesquisador Principal',
+    name: 'Aristóteles',
+    role: 'Membro Pesquisador',
     imageUrl: 'https://picsum.photos/seed/aristotelesPesquisador/300/300',
     bio: 'Foco em Ética, Filosofia Política e Teorias da Justiça.',
   },
   {
     id: '3',
-    name: 'Simone de Beauvoir Silva',
+    name: 'Simone de Beauvoir',
     role: 'Membro Pesquisador',
     imageUrl: 'https://picsum.photos/seed/simoneMembro/300/300',
     bio: 'Estudos em Fenomenologia, Existencialismo e Filosofia Feminista.',
   },
   {
     id: '4',
-    name: 'Friedrich Nietzsche Rocha',
+    name: 'Friedrich Nietzsche',
     role: 'Membro Pesquisador',
     imageUrl: 'https://picsum.photos/seed/nietzscheMembro/300/300',
     bio: 'Pesquisa sobre Filosofia da Vontade, Niilismo e Pós-Estruturalismo.',
