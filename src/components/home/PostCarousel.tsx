@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Post } from '@/lib/types';
@@ -7,6 +8,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CalendarDays, User } from 'lucide-react';
+import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
 
 interface PostCarouselProps {
   posts: Post[];
@@ -17,13 +20,20 @@ export default function PostCarousel({ posts }: PostCarouselProps) {
     return <p className="text-center text-lg text-foreground/80 py-10">Nenhuma postagem recente encontrada.</p>;
   }
 
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })
+  );
+
   return (
     <Carousel
       opts={{
         align: "start",
         loop: posts.length > 1, // Only loop if more than one item
       }}
+      plugins={[plugin.current]}
       className="w-full max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto"
+      onMouseEnter={plugin.current.stop}
+      onMouseLeave={plugin.current.reset}
     >
       <CarouselContent className="-ml-4">
         {posts.map((post) => (
