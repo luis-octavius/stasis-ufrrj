@@ -20,9 +20,9 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: 'ΣΤΑΣΙΣ UFRRJ - Grupo de Estudos em Filosofia',
-  description: 'Página do Grupo de Estudos em Filosofia ΣΤΑΣΙΣ da UFRRJ. Eventos, postagens e textos filosóficos.',
+  description: 'Página do Grupo de Estudos em Filosofia ΣΤΑΣΙΣ da UFRRJ. Eventos, postagens e publicações.',
   icons: {
-    icon: '/favicon.ico', // Placeholder, actual favicon not generated
+    icon: '/greek.svg', // Placeholder, actual favicon not generated
   }
 };
 

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="24" height="24.001" viewBox="0 0 24 24.001" id="greek">
+  <path id="Frames-24px" fill="none" d="M0 0h24v24.001H0z"></path>
+  <g id="Outline" fill="#757575">
+    <path d="M18.003 2.003h-12a4 4 0 1 0 4 4c0-.732-.211-1.41-.555-2h5.109a3.965 3.965 0 0 0-.555 2 4 4 0 1 0 4.001-4zm-10 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm10 2a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM8.003 22.003h2v-7h1v7h2v-7h1v7h2v-9h-8z"></path>
+    <path d="M8.003 10.003h8v2h-8z"></path>
+  </g>
+</svg>

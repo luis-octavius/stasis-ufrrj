@@ -50,7 +50,7 @@ export default function HomePage() {
   return (
     <div className="space-y-16">
       <section className="text-center py-12 bg-card shadow-xl rounded-lg overflow-hidden">
-        <div className="relative w-36 h-36 mx-auto mb-6">
+        {/* <div className="relative w-36 h-36 mx-auto mb-6">
            <Image 
             src="https://picsum.photos/200/200?random=100"
             alt="Stásis UFRRJ Logo Concept"
@@ -60,7 +60,7 @@ export default function HomePage() {
             data-ai-hint="philosophy wisdom symbol"
             priority
           />
-        </div>
+        </div> */}
         <h2 className="text-5xl md:text-6xl font-bold uppercase-ancient text-primary mb-4">
           ΣΤΑΣΙΣ <span className="text-accent">UFRRJ</span>
         </h2>
@@ -86,11 +86,8 @@ export default function HomePage() {
       <section className="py-12 bg-secondary/20 rounded-lg shadow-lg">
         <div className="container mx-auto px-4 text-center">
           <h3 className="text-3xl font-semibold uppercase-ancient mb-6 text-primary">Sobre o Grupo</h3>
-          <p className="text-lg text-foreground/80 max-w-2xl mx-auto mb-4">
-            O Stásis é um espaço dedicado à investigação e ao diálogo filosófico, fomentando a pesquisa e a disseminação do conhecimento na UFRRJ e para além de seus muros.
-          </p>
-          <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-            Nosso nome, "Stásis" (στάσις), remete ao conceito grego que abrange ideias de imobilidade, posição, mas também de conflito e crise – um ponto de tensão fundamental para o pensamento crítico.
+          <p className="text-xl font-normal text-foreground/80 max-w-2xl mx-auto mb-4">
+          O <span className="font-bold">Stásis (ΣΤΆΣΙΣ)</span> é um grupo de estudos filosóficos da UFRRJ que investiga as dinâmicas do conflito político, tomando como eixo central o conceito grego de stásis – a guerra civil na Antiguidade clássica. Nosso objetivo é articular o pensamento de filósofos como Platão e Aristóteles, que refletiram profundamente sobre a stásis, com as crises políticas do mundo atual, onde divisões radicais, polarizações e colapsos institucionais ecoam os mesmos desafios enfrentados pelas póleis gregas.
           </p>
         </div>
       </section>
