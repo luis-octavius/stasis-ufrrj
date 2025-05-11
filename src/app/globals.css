@@ -13,18 +13,18 @@ Ancient Greek Pottery Palette:
 @layer base {
   :root {
     --background: 25 50% 60%; /* Terracotta */
-    --foreground: 0 0% 15%; /* Soft Black */
+    --foreground: 0 0% 15%; /* Soft Black */ /* Keeping foreground as dark for readability */
 
-    --card: 0 0% 98%; /* Off-White/Cream */
-    --card-foreground: 0 0% 15%; /* Soft Black */
+    --card: 0 0% 98%; /* Off-White/Cream */ /* Keeping card as light for readability */
+    --card-foreground: 0 0% 15%; /* Soft Black */ /* Keeping card-foreground as dark for readability */
 
-    --popover: 0 0% 98%; /* Off-White/Cream */
-    --popover-foreground: 0 0% 15%; /* Soft Black */
+    --popover: 0 0% 98%; /* Off-White/Cream */ /* Keeping popover as light for readability */
+    --popover-foreground: 0 0% 15%; /* Soft Black */ /* Keeping popover-foreground as dark for readability */
 
-    --primary: 0 0% 15%; /* Soft Black (used for primary buttons/elements on light backgrounds) */
-    --primary-foreground: 0 0% 98%; /* Off-White for text on primary */
+    --primary: 224 13% 33%; /* rgb(96, 70, 82) converted to HSL */ /* Darker Terracotta/Brown for primary elements */
+    --primary-foreground: 0 0% 98%; /* Off-White for text on primary (can adjust based on contrast) */
 
-    --secondary: 30 30% 75%; /* Lighter Terracotta/Beige for secondary elements */
+    --secondary: 355 14% 40%; /* rgb(115, 85, 87) converted to HSL */ /* Lighter Terracotta/Beige for secondary elements */
     --secondary-foreground: 0 0% 15%; /* Soft Black */
 
     --muted: 30 30% 85%; /* Very Light Terracotta/Beige for muted elements */
@@ -37,8 +37,8 @@ Ancient Greek Pottery Palette:
     --destructive-foreground: 0 0% 98%; /* Off-White */
 
     --border: 0 0% 85%; /* Light Gray border */
-    --input: 0 0% 90%; /* Light Gray input background */ /* Replacing Gold with a slightly lighter blue for focus rings */
-    --ring: 220 50% 40%;
+    --input: 0 0% 90%; /* Light Gray input background */
+    --ring: 220 50% 40%; /* Replacing Gold with a slightly lighter blue for focus rings */
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -59,40 +59,39 @@ Ancient Greek Pottery Palette:
   }
 
   .dark {
-    --background: 0 0% 10%; /* Very Dark Gray/Black */
-    --foreground: 0 0% 90%; /* Light Gray/Off-White */
+    --background: 0 0% 10%; /* Very Dark Gray/Black */ /* Keeping background dark for readability */
+    --foreground: 0 0% 90%; /* Light Gray/Off-White */ /* Keeping foreground light for readability */
 
     --card: 0 0% 15%; /* Dark Gray */
     --card-foreground: 0 0% 90%; /* Light Gray/Off-White */
 
-    --popover: 0 0% 15%; /* Dark Gray */
+    --popover: 0 0% 15%; /* Dark Gray */ /* Keeping popover dark for readability */
     --popover-foreground: 0 0% 90%; /* Light Gray/Off-White */
 
-    --primary: 0 0% 90%; /* Light Gray/Off-White (for primary buttons on dark backgrounds) */
-    --primary-foreground: 0 0% 10%; /* Very Dark Gray/Black */
+    --primary: 224 13% 33%; /* rgb(96, 70, 82) converted to HSL */ /* Light Gray/Off-White (for primary buttons on dark backgrounds) */
+    --primary-foreground: 0 0% 10%; /* Very Dark Gray/Black */ /* Can adjust based on contrast */
 
-    --secondary: 0 0% 25%; /* Medium-Dark Gray */
-    --secondary-foreground: 0 0% 90%; /* Light Gray/Off-White */
+    --secondary: 355 14% 40%; /* rgb(115, 85, 87) converted to HSL */ /* Medium-Dark Gray */
+    --secondary-foreground: 0 0% 90%; /* Light Gray/Off-White */ /* Can adjust based on contrast */
 
     --muted: 0 0% 20%; /* Dark Gray for muted elements */
-    --muted-foreground: 0 0% 60%; /* Medium Gray */
+    --muted-foreground: 0 0% 60%; /* Medium Gray */ /* Can adjust based on contrast */
 
     --accent: 220 50% 30%; /* Deep Ancient Blue */
-    --accent-foreground: 220 0% 95%; /* Light Blue/White for text on blue */
+    --accent-foreground: 0 0% 95%; /* Light Blue/White for text on blue */ /* Can adjust based on contrast */
 
     --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 25%; /* Medium-Dark Gray border */
-    --input: 0 0% 20%; /* Dark Gray input background */ /* Replacing Gold with a slightly lighter blue for focus rings */
-    --ring: 220 50% 40%;
+    --input: 0 0% 20%; /* Dark Gray input background */
+    --ring: 220 50% 40%; /* Replacing Gold with a slightly lighter blue for focus rings */
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 51 100% 50%;
-    --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 0 0% 18%;
-    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-background: 0 0% 8%; /* Keeping dark */
+    --sidebar-foreground: 0 0% 90%; /* Keeping light */
+    --sidebar-primary: 220 50% 30%; /* Deep Ancient Blue for active/primary items in sidebar */
+    --sidebar-primary-foreground: 220 0% 95%; /* Light Blue/White for text on blue */ /* Keeping light */
+    --sidebar-accent: 270 12% 32%; /* Using primary */
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 51 100% 60%;
   }
