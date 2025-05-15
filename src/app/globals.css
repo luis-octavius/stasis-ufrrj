@@ -49,13 +49,13 @@ Ancient Greek Pottery Palette:
 
     /* Sidebar specific colors - can be same as main or adjusted */
     --sidebar-background: 25 40% 50%; /* Darker Terracotta for sidebar */
-    --sidebar-foreground: 0 0% 95%;   /* Off-White text */
-    --sidebar-primary: 220 50% 30%;   /* Deep Ancient Blue for active/primary items in sidebar */
+    --sidebar-foreground: 0 0% 95%; /* Off-White text */
+    --sidebar-primary: 220 50% 30%; /* Deep Ancient Blue for active/primary items in sidebar */
     --sidebar-primary-foreground: 220 0% 95%; /* Light Blue/White for text on blue */
-    --sidebar-accent: 25 50% 65%;     /* Lighter Terracotta for hover */
+    --sidebar-accent: 25 50% 65%; /* Lighter Terracotta for hover */
     --sidebar-accent-foreground: 0 0% 10%; /* Soft Black */
-    --sidebar-border: 25 30% 40%;     /* Darker terracotta border */
-    --sidebar-ring: 51 100% 60%;      /* Gold for focus */
+    --sidebar-border: 25 30% 40%; /* Darker terracotta border */
+    --sidebar-ring: 51 100% 60%; /* Gold for focus */
   }
 
   .dark {
@@ -102,11 +102,17 @@ Ancient Greek Pottery Palette:
   body {
     @apply bg-background text-foreground font-serif; /* Default to serif */
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif tracking-tight;
   }
   .uppercase-ancient {
-    font-family: 'Georgia', 'Times New Roman', Times, serif; /* Fallback serif fonts */
+    font-family:
+      "Georgia", "Times New Roman", Times, serif; /* Fallback serif fonts */
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -115,12 +121,23 @@ Ancient Greek Pottery Palette:
   .prose {
     @apply text-foreground/90;
   }
-  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
     @apply text-primary font-semibold mb-4 mt-8;
   }
-  .prose h1 { @apply text-3xl; }
-  .prose h2 { @apply text-2xl; }
-  .prose h3 { @apply text-xl; }
+  .prose h1 {
+    @apply text-3xl;
+  }
+  .prose h2 {
+    @apply text-2xl;
+  }
+  .prose h3 {
+    @apply text-xl;
+  }
   .prose p {
     @apply mb-6 leading-relaxed;
   }
@@ -130,7 +147,8 @@ Ancient Greek Pottery Palette:
   .prose strong {
     @apply font-semibold text-primary;
   }
-  .prose ul, .prose ol {
+  .prose ul,
+  .prose ol {
     @apply ml-6 mb-6;
   }
   .prose li {

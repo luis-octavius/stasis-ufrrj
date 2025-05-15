@@ -6,7 +6,7 @@ export interface Post {
   imageUrl: string;
   excerpt: string;
   content: string; // Full content, can be markdown or HTML string
-  slug: string; 
+  slug: string;
 }
 
 export interface Member {

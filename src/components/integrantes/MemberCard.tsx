@@ -1,7 +1,13 @@
-import type { Member } from '@/lib/types';
-import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Award } from 'lucide-react'; 
+import type { Member } from "@/lib/types";
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Award } from "lucide-react";
 
 export default function MemberCard({ member }: { member: Member }) {
   return (

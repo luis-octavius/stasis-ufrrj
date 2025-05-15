@@ -8,7 +8,7 @@
     pkgs.nodejs_20
     pkgs.zulu
     pkgs.openssh 
- pkgs.firebase-cli
+    pkgs.firebase-cli
   ];
   # Sets environment variables in the workspace
   env = {};

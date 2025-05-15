@@ -1,6 +1,6 @@
-import { mockPosts } from '@/lib/data';
-import PostCarousel from '@/components/home/PostCarousel';
-import Image from 'next/image';
+import { mockPosts } from "@/lib/data";
+import PostCarousel from "@/components/home/PostCarousel";
+import Image from "next/image";
 
 const LaurelWreathSectionIcon = () => (
   <div aria-hidden="true" className="my-12 text-center">
@@ -41,7 +41,6 @@ const LaurelWreathSectionIcon = () => (
   </div>
 );
 
-
 export default function HomePage() {
   const latestPosts = [...mockPosts]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -65,13 +64,16 @@ export default function HomePage() {
           ΣΤΑΣΙΣ <span className="text-accent">UFRRJ</span>
         </h2>
         <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-8 px-4">
-          Grupo de Estudos em Filosofia da Universidade Federal Rural do Rio de Janeiro.
+          Grupo de Estudos em Filosofia da Universidade Federal Rural do Rio de
+          Janeiro.
         </p>
         <p className="text-lg text-foreground/70 max-w-2xl mx-auto px-4">
-          Explorando os caminhos do pensamento, da antiguidade à contemporaneidade. Participe de nossos debates, palestras e publicações.
+          Explorando os caminhos do pensamento, da antiguidade à
+          contemporaneidade. Participe de nossos debates, palestras e
+          publicações.
         </p>
       </section>
-      
+
       <LaurelWreathSectionIcon />
 
       <section>
@@ -85,9 +87,19 @@ export default function HomePage() {
 
       <section className="py-12 bg-secondary/20 rounded-lg shadow-lg">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-3xl font-semibold uppercase-ancient mb-6 text-primary">Sobre o Grupo</h3>
+          <h3 className="text-3xl font-semibold uppercase-ancient mb-6 text-primary">
+            Sobre o Grupo
+          </h3>
           <p className="text-xl font-normal text-foreground/80 max-w-2xl mx-auto mb-4">
-          O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de estudos filosóficos da <strong>UFRRJ</strong> que investiga as dinâmicas do conflito político, tomando como eixo central o conceito grego de <em>stásis</em> – a guerra civil na Antiguidade clássica. Nosso objetivo é articular o pensamento de filósofos como Platão e Aristóteles, que refletiram profundamente sobre a stásis, com as crises políticas do mundo atual, no qual divisões radicais, polarizações e colapsos institucionais ecoam os mesmos desafios enfrentados pelas <em>póleis</em> gregas.
+            O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de estudos filosóficos
+            da <strong>UFRRJ</strong> que investiga as dinâmicas do conflito
+            político, tomando como eixo central o conceito grego de{" "}
+            <em>stásis</em> – a guerra civil na Antiguidade clássica. Nosso
+            objetivo é articular o pensamento de filósofos como Platão e
+            Aristóteles, que refletiram profundamente sobre a stásis, com as
+            crises políticas do mundo atual, no qual divisões radicais,
+            polarizações e colapsos institucionais ecoam os mesmos desafios
+            enfrentados pelas <em>póleis</em> gregas.
           </p>
         </div>
       </section>
