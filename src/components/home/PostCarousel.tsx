@@ -21,14 +21,14 @@ export default function PostCarousel({ posts }: PostCarouselProps) {
   }
 
   const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })
+    Autoplay({ delay: 7000, stopOnInteraction: true, stopOnMouseEnter: true, playOnInit: true, direction: 'forward' })
   );
 
   return (
     <Carousel
       opts={{
         align: "start",
-        loop: posts.length > 1, // Only loop if more than one item
+        loop: posts.length > 1, 
       }}
       plugins={[plugin.current]}
       className="w-full max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto"
@@ -82,7 +82,7 @@ export default function PostCarousel({ posts }: PostCarouselProps) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {posts.length > 1 && ( // Only show prev/next if more than one item for non-looping, or always if looping and more than 3 for typical view
+      {posts.length > 1 && ( 
         <>
           <CarouselPrevious className="hidden sm:flex absolute left-[-20px] md:left-[-50px] top-1/2 -translate-y-1/2 text-foreground bg-background/60 hover:bg-background/90 border-primary/30 disabled:opacity-30" />
           <CarouselNext className="hidden sm:flex absolute right-[-20px] md:right-[-50px] top-1/2 -translate-y-1/2 text-foreground bg-background/60 hover:bg-background/90 border-primary/30 disabled:opacity-30" />
