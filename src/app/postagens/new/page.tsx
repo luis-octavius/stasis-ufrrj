@@ -1,21 +1,28 @@
 // src/app/new-post/page.tsx
 "use client";
 import { useState } from "react";
-import { storage } from "../../../../firebase";
+import { storage, db } from "../../../lib/firebase"; // Import db
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Fix the import path for firebase. It should be relative to the current file.
+import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 import { v4 as uuidv4 } from "uuid"; // To generate unique file names
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 export default function NewPostPage() {
+  const router = useRouter(); // Initialize router
   const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
+  const [slug, setSlug] = useState(""); // Consider adding a state for slug generation if needed
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [content, setContent] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add state for form submission
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (isSubmitting) return; // Prevent double submission
+    setIsSubmitting(true); // Set submitting state
 
     let finalImageUrl = imageUrl;
 
@@ -33,21 +40,43 @@ export default function NewPostPage() {
       } catch (error) {
         console.error("Error uploading image:", error);
         setUploadError("Failed to upload image. Please try again.");
-        setIsUploading(false);
+        setIsUploading(false); // Reset uploading state
+        setIsSubmitting(false); // Reset submitting state on error
         return; // Stop submission if upload fails
       } finally {
         setIsUploading(false);
       }
     }
 
-    // Here you would typically handle the submission with finalImageUrl, e.g., send to an API
-    console.log("New Post Data:", { title, slug, finalImageUrl, content });
-    // Reset form or navigate to another page after successful post creation
+    // Add data to Firestore
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        title,
+        slug: slug || title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''), // Use slug if provided, otherwise generate from title
+        imageUrl: finalImageUrl, // Use finalImageUrl which could be uploaded URL or manual URL
+        content,
+        createdAt: new Date(), // Add a timestamp
+      });
+      console.log("Document written with ID: ", docRef.id);
+      // Redirect to success page
+      router.push('/postagens/success'); // Redirect here
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      // Handle the error, e.g., show an error message to the user
+      // You might want to set an error state here to display a message on the page
+    } finally {
+      setIsSubmitting(false); // Reset submitting state regardless of success or failure
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    return (
-      <div className="container mx-auto px-4 py-8">
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">Create New Post</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
@@ -109,7 +138,7 @@ export default function NewPostPage() {
               Upload Image
             </label>
             <input
-              disabled={isUploading}
+              disabled={isUploading || isSubmitting} // Disable input while uploading or submitting
               type="file"
               id="imageUpload"
               accept="image/*"
@@ -137,14 +166,13 @@ export default function NewPostPage() {
           <div>
             <button
               type="submit"
-              disabled={isUploading}
+              disabled={isUploading || isSubmitting} // Disable button while uploading or submitting
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              {isUploading ? "Uploading Image..." : "Create Post"}
+              {isSubmitting ? "Creating Post..." : isUploading ? "Uploading Image..." : "Create Post"}
             </button>
           </div>
         </form>
       </div>
     );
-  };
 }
