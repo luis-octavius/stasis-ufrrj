@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { auth } from "../../lib/firebase"; // Import auth
-import { onAuthStateChanged, signOut, User } from "firebase/auth"; // Import onAuthStateChanged and signOut
+import { onAuthStateChanged, signOut, User } from "firebase/auth"; // Import onAuthStateChanged, signOut, and User type
 import { useRouter } from "next/navigation"; // Import useRouter
 
 
@@ -41,6 +41,14 @@ const GreekColumnIcon = () => (
   </svg>
 );
 
+// Define the types for auth links
+type AuthLink = {
+  href: string;
+  label: string;
+  action?: "logout"; // 'action' is optional and specifically 'logout' if present
+};
+
+
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,10 +63,9 @@ export default function Header() {
     { href: "#contato", label: "CONTATO" },
   ];
 
-   // Add conditional links based on user authentication status
-   const authLinks = user
+   // Define authLinks with the specified type
+   const authLinks: AuthLink[] = user
     ? [
-        { href: "/postagens/new", label: "NOVA POSTAGEM" },
         { href: "/logout", label: "SAIR", action: "logout" }, // Added action for logout
       ]
     : [
@@ -148,7 +155,7 @@ export default function Header() {
                     href={link.href}
                      onClick={link.action === "logout" ? handleLogout : () => {}}
                      className={`uppercase-ancient text-sm font-medium transition-all duration-200 hover:text-accent hover:scale-105 ${
-                        pathname === link.href
+                        pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
                             ? "text-accent scale-110 border-b-2 border-accent"
                             : "text-foreground"
                      }`}
@@ -204,7 +211,7 @@ export default function Header() {
                     href={link.href}
                      onClick={link.action === "logout" ? handleLogout : () => setIsMenuOpen(false)} // Close menu on click unless logout
                      className={`uppercase-ancient text-lg font-medium transition-colors hover:text-accent ${
-                        pathname === link.href
+                        pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
                             ? "text-accent"
                             : "text-foreground"
                      }`}
