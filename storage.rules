@@ -1,17 +1,19 @@
 rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        // Permite leitura (read) de todos os documentos
+        // Permite escrita (write) APENAS na coleção 'posts'
+        // A escrita em 'posts' é permitida APENAS se o usuário estiver autenticado (request.auth != null)
+        match /posts/{postId} {
+          allow read;
+          allow create: if request.auth != null;
+          // Se quiser permitir que o autor da postagem atualize/delete, adicione condições:
+          // allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorId;
+        }
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /post-images/{imageId} {
-      allow write: if request.auth != null;
-      allow read: if true;
+        // Regra genérica para outras coleções (mantém restrição, se necessário)
+        match /{document=**} {
+           allow read, write: if false; // Mantenha restrito o acesso a outras coleções, a menos que precise
+        }
+      }
     }
-    
-    match /{allPaths=**} {
-      allow read, write: if false;
-    }
-  }
-}
