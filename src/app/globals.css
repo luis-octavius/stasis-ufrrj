@@ -68,7 +68,8 @@ Ancient Greek Pottery Palette:
     --popover: 0 0% 15%; /* Dark Gray */ /* Keeping popover dark for readability */
     --popover-foreground: 0 0% 90%; /* Light Gray/Off-White */
 
-    --primary: 224 13% 33%; /* rgb(96, 70, 82) converted to HSL */ /* Light Gray/Off-White (for primary buttons on dark backgrounds) */
+    /* --primary: 224 13% 33%;  */
+    --primary: 61 13% 33%;/* rgb(96, 70, 82) converted to HSL */ /* Light Gray/Off-White (for primary buttons on dark backgrounds) */
     --primary-foreground: 0 0% 10%; /* Very Dark Gray/Black */ /* Can adjust based on contrast */
 
     --secondary: 355 14% 40%; /* rgb(115, 85, 87) converted to HSL */ /* Medium-Dark Gray */
