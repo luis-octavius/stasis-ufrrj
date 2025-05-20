@@ -1,121 +1,88 @@
 // src/app/postagens/[slug]/page.tsx
-"use client";
+// NO "use client"; HERE
 
-import { useState, useEffect } from "react";
-import { db, auth } from "../../../lib/firebase"; // Adjust path as needed
-import { collection, query, where, getDocs } from "firebase/firestore"; // Import Firestore functions
-import { useParams, useRouter } from 'next/navigation'; // Import useParams and useRouter
-import { onAuthStateChanged } from "firebase/auth"; // Import onAuthStateChanged
-import Link from "next/link"; // Import Link
+import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore'; // Import Timestamp type
+import { db } from '../../../lib/firebase'; // Direct import is okay for server code
 
-export default function ViewPostPage() {
-  const router = useRouter();
-  const params = useParams(); // Get parameters from the URL
-  const slug = params.slug as string; // Get the slug from the URL parameters
+import PostDetailClient from '../../../components/PostDetailClient'; // Import the client component
 
-  const [post, setPost] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null); // State to hold user information
-  const [loadingAuth, setLoadingAuth] = useState(true); // State to indicate auth loading
-
-
-   // Authentication check (optional for viewing, but useful for showing edit button)
-   useEffect(() => {
-     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-       setUser(currentUser);
-       setLoadingAuth(false);
-     });
-     return () => unsubscribe();
-   }, [auth]); // Dependency on auth
+// Define a interface para os dados do post
+interface PostData {
+    id: string;
+    title: string;
+    slug: string;
+    imageUrl?: string;
+    content: string;
+    authorId: string;
+    // AGORA ESPERAMOS QUE createdAt JÁ SEJA UM OBJETO DATE OU NULL
+    createdAt: Date | null;
+}
 
 
-  // Fetch post data based on slug
-  useEffect(() => {
-    if (!slug) {
-        // Don't fetch if slug is not available
-        return;
-    }
+// Função para gerar parâmetros estáticos para o build
+export async function generateStaticParams() {
+  console.log("Running generateStaticParams...");
 
-    const fetchPost = async () => {
-        setLoading(true);
-        try {
-            const postsCollection = collection(db, "posts");
-            // Create a query to find the post by slug
-            const q = query(postsCollection, where("slug", "==", slug));
-            const querySnapshot = await getDocs(q);
+  try {
+    const postsCollection = collection(db, 'posts');
+    const querySnapshot = await getDocs(postsCollection);
 
-            if (querySnapshot.empty) {
-                console.log("No matching post found for slug:", slug);
-                // Redirect to a 404 page or show a message
-                router.push('/postagens/not-found'); // Example redirect to a not found page
-                return;
+    const params = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+       if (data.slug && typeof data.slug === 'string') {
+           console.log("Found post with slug:", data.slug);
+           return { slug: data.slug };
+       }
+       return null;
+    }).filter(param => param !== null);
+
+    console.log("generateStaticParams returning:", params);
+    return params;
+
+  } catch (error) {
+    console.error("Error in generateStaticParams:", error);
+     throw error;
+  }
+}
+
+// Server Component Page
+export default async function PostDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = params; // Get slug from params passed by Next.js
+
+    // Fetch the specific post data on the server side
+    let postData: PostData | null = null;
+    try {
+        console.log(`Fetching post data on server for slug: ${slug}`);
+        const postsCollection = collection(db, "posts");
+        const q = query(postsCollection, where("slug", "==", slug));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const doc = querySnapshot.docs[0];
+            const rawData = doc.data(); // Get raw data
+            const postData = { ...rawData, id: doc.id } as PostData; // Cast to PostData structure
+
+            // !! ADICIONADA A LÓGICA DE CONVERSÃO DE TIMESTAMP AQUI NO SERVER COMPONENT !!
+            if (rawData.createdAt instanceof Timestamp && typeof rawData.createdAt.toDate === 'function') {
+                postData.createdAt = rawData.createdAt.toDate();
+            } else {
+                postData.createdAt = null; // Ensure it's null if not a valid timestamp
             }
 
-            // Assuming slug is unique, there should be only one document
-            const postDoc = querySnapshot.docs[0];
-            setPost({ id: postDoc.id, ...postDoc.data() });
 
-        } catch (error) {
-            console.error("Error fetching post:", error);
-            // Handle error fetching post, e.g., show an error message
-             router.push('/postagens/not-found'); // Redirect on error as well
-        } finally {
-            setLoading(false);
+            console.log("Post data fetched on server:", postData);
+             return <PostDetailClient initialPostData={postData} slug={slug} />; // Render client component with data
+        } else {
+             console.log(`No post found on server for slug: ${slug}`);
+             // If post not found, render client component with null data
+             return <PostDetailClient initialPostData={null} slug={slug} />;
         }
-    };
+    } catch (error) {
+        console.error("Error fetching post data on server:", error);
+        // If error during fetch, render client component with null data and error state might be handled there
+         return <PostDetailClient initialPostData={null} slug={slug} />;
+    }
 
-    fetchPost();
-
-  }, [slug, router]); // Rerun when slug or router changes
-
-
-  if (loading || loadingAuth) {
-    return <div className="text-center mt-8">Carregando postagem...</div>; // Mensagem em português
-  }
-
-   // If post is null, it means it wasn't found and we redirected, but adding a check here is good practice
-  if (!post) {
-      return null; // Or a loading indicator, but the redirect should handle this
-  }
-
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-        {/* Back button or link (optional) */}
-         <div className="mb-6">
-             <Link href="/postagens" className="text-indigo-600 hover:underline">
-                 &larr; Voltar para as Postagens {/* Texto do link em português */}
-             </Link>
-         </div>
-
-      <h1 className="text-3xl font-bold mb-4">{post.title}</h1> {/* Título da postagem */}
-
-       {/* Display edit button only if user is logged in and is the author */}
-       {user && user.uid === post.authorId && (
-           <div className="mb-4">
-               <Link href={`/postagens/edit/${post.slug}`} className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                   Editar Postagem {/* Texto do botão em português */}
-               </Link>
-           </div>
-       )}
-
-      {post.imageUrl && (
-        <div className="mb-6">
-          <img src={post.imageUrl} alt={post.title} className="w-full h-80 object-cover rounded-md" />
-        </div>
-      )}
-
-      <div className="prose max-w-none"> {/* Using 'prose' class for basic typography, requires @tailwindcss/typography plugin */}
-        <p>{post.content}</p> {/* Conteúdo da postagem */}
-         {/* You might want to render the content as HTML if you use a rich text editor */}
-      </div>
-
-       {/* Display author and date (optional) */}
-       <div className="mt-8 text-sm text-gray-600">
-           {post.authorId && <p>Autor ID: {post.authorId}</p>} {/* Display author ID (for now) */}
-            {post.createdAt && <p>Publicado em: {new Date(post.createdAt.seconds * 1000).toLocaleDateString('pt-BR')}</p>} {/* Display formatted date */}
-       </div>
-
-    </div>
-  );
+    // This line might not be reached if returning within try/catch, but good practice
+    // return <PostDetailClient initialPostData={postData} slug={slug} />;
 }
