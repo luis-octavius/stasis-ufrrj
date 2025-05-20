@@ -1,138 +1,121 @@
-import { mockPosts } from "@/lib/data";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, CalendarDays, UserCircle2 } from "lucide-react";
-import type { Metadata, ResolvingMetadata } from "next";
+// src/app/postagens/[slug]/page.tsx
+"use client";
 
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
+import { useState, useEffect } from "react";
+import { db, auth } from "../../../lib/firebase"; // Adjust path as needed
+import { collection, query, where, getDocs } from "firebase/firestore"; // Import Firestore functions
+import { useParams, useRouter } from 'next/navigation'; // Import useParams and useRouter
+import { onAuthStateChanged } from "firebase/auth"; // Import onAuthStateChanged
+import Link from "next/link"; // Import Link
 
-export async function generateMetadata(
-  { params }: PostPageProps,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
-  const post = mockPosts.find((p) => p.slug === params.slug);
+export default function ViewPostPage() {
+  const router = useRouter();
+  const params = useParams(); // Get parameters from the URL
+  const slug = params.slug as string; // Get the slug from the URL parameters
 
-  if (!post) {
-    return {
-      title: "Post Não Encontrado - ΣΤΑΣΙΣ UFRRJ",
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null); // State to hold user information
+  const [loadingAuth, setLoadingAuth] = useState(true); // State to indicate auth loading
+
+
+   // Authentication check (optional for viewing, but useful for showing edit button)
+   useEffect(() => {
+     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+       setUser(currentUser);
+       setLoadingAuth(false);
+     });
+     return () => unsubscribe();
+   }, [auth]); // Dependency on auth
+
+
+  // Fetch post data based on slug
+  useEffect(() => {
+    if (!slug) {
+        // Don't fetch if slug is not available
+        return;
+    }
+
+    const fetchPost = async () => {
+        setLoading(true);
+        try {
+            const postsCollection = collection(db, "posts");
+            // Create a query to find the post by slug
+            const q = query(postsCollection, where("slug", "==", slug));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                console.log("No matching post found for slug:", slug);
+                // Redirect to a 404 page or show a message
+                router.push('/postagens/not-found'); // Example redirect to a not found page
+                return;
+            }
+
+            // Assuming slug is unique, there should be only one document
+            const postDoc = querySnapshot.docs[0];
+            setPost({ id: postDoc.id, ...postDoc.data() });
+
+        } catch (error) {
+            console.error("Error fetching post:", error);
+            // Handle error fetching post, e.g., show an error message
+             router.push('/postagens/not-found'); // Redirect on error as well
+        } finally {
+            setLoading(false);
+        }
     };
+
+    fetchPost();
+
+  }, [slug, router]); // Rerun when slug or router changes
+
+
+  if (loading || loadingAuth) {
+    return <div className="text-center mt-8">Carregando postagem...</div>; // Mensagem em português
   }
 
-  const previousImages = (await parent).openGraph?.images || [];
-
-  return {
-    title: `${post.title} - ΣΤΑΣΙΣ UFRRJ`,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: post.imageUrl
-        ? [post.imageUrl, ...previousImages]
-        : previousImages,
-      type: "article",
-      authors: [post.author],
-      publishedTime: post.date,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: post.imageUrl ? [post.imageUrl] : [],
-    },
-  };
-}
-
-export async function generateStaticParams() {
-  return mockPosts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
-export default function PostPage({ params }: PostPageProps) {
-  const post = mockPosts.find((p) => p.slug === params.slug);
-
+   // If post is null, it means it wasn't found and we redirected, but adding a check here is good practice
   if (!post) {
-    notFound();
+      return null; // Or a loading indicator, but the redirect should handle this
   }
+
 
   return (
-    <article className="max-w-3xl mx-auto bg-card p-6 sm:p-8 md:p-10 rounded-lg shadow-xl">
-      <div className="mb-8">
-        <Button
-          variant="outline"
-          asChild
-          className="border-accent text-accent hover:bg-accent hover:text-accent-foreground transition-colors group"
-        >
-          <Link href="/postagens">
-            <ArrowLeft
-              size={18}
-              className="mr-2 group-hover:-translate-x-1 transition-transform"
-            />
-            Voltar para Postagens
-          </Link>
-        </Button>
-      </div>
+    <div className="container mx-auto px-4 py-8">
+        {/* Back button or link (optional) */}
+         <div className="mb-6">
+             <Link href="/postagens" className="text-indigo-600 hover:underline">
+                 &larr; Voltar para as Postagens {/* Texto do link em português */}
+             </Link>
+         </div>
 
-      <header className="mb-8 border-b border-border pb-6">
-        <h1 className="text-3xl md:text-4xl font-bold uppercase-ancient text-primary mb-4 leading-tight">
-          {post.title}
-        </h1>
-        <div className="text-sm text-foreground/70 flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-2">
-          <span className="inline-flex items-center">
-            <UserCircle2 size={16} className="mr-1.5 text-accent" />
-            Por {post.author}
-          </span>
-          <span className="inline-flex items-center">
-            <CalendarDays size={16} className="mr-1.5 text-accent" />
-            {new Date(post.date).toLocaleDateString("pt-BR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        </div>
-      </header>
+      <h1 className="text-3xl font-bold mb-4">{post.title}</h1> {/* Título da postagem */}
+
+       {/* Display edit button only if user is logged in and is the author */}
+       {user && user.uid === post.authorId && (
+           <div className="mb-4">
+               <Link href={`/postagens/edit/${post.slug}`} className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                   Editar Postagem {/* Texto do botão em português */}
+               </Link>
+           </div>
+       )}
 
       {post.imageUrl && (
-        <div className="relative w-full h-64 md:h-80 mb-10 rounded-lg overflow-hidden shadow-md">
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            layout="fill"
-            objectFit="cover"
-            data-ai-hint="article detail philosophy event"
-            priority
-          />
+        <div className="mb-6">
+          <img src={post.imageUrl} alt={post.title} className="w-full h-80 object-cover rounded-md" />
         </div>
       )}
 
-      <div
-        className="prose prose-lg max-w-none" // prose styles applied from globals.css
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
-
-      <hr className="my-12 border-border" />
-
-      <div className="text-center">
-        <Button
-          variant="default"
-          asChild
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
-        >
-          <Link href="/">
-            <ArrowLeft size={18} className="mr-2" />
-            Voltar para Início
-          </Link>
-        </Button>
+      <div className="prose max-w-none"> {/* Using 'prose' class for basic typography, requires @tailwindcss/typography plugin */}
+        <p>{post.content}</p> {/* Conteúdo da postagem */}
+         {/* You might want to render the content as HTML if you use a rich text editor */}
       </div>
-    </article>
+
+       {/* Display author and date (optional) */}
+       <div className="mt-8 text-sm text-gray-600">
+           {post.authorId && <p>Autor ID: {post.authorId}</p>} {/* Display author ID (for now) */}
+            {post.createdAt && <p>Publicado em: {new Date(post.createdAt.seconds * 1000).toLocaleDateString('pt-BR')}</p>} {/* Display formatted date */}
+       </div>
+
+    </div>
   );
 }
