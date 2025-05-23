@@ -1,6 +1,13 @@
-import { mockPosts } from "@/lib/data";
+// src/app/page.tsx
+
+// Remova esta importação: import { mockPosts } from "@/lib/data";
 import PostCarousel from "@/components/home/PostCarousel";
 import Image from "next/image";
+// Importe a nova função de busca:
+import { getRecentPosts } from "@/lib/postagens";
+// Importe o tipo Post:
+import { Post } from "@/lib/types";
+
 
 const LaurelWreathSectionIcon = () => (
   <div aria-hidden="true" className="my-12 text-center">
@@ -41,16 +48,28 @@ const LaurelWreathSectionIcon = () => (
   </div>
 );
 
-export default function HomePage() {
-  const latestPosts = [...mockPosts]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 3);
+// Torne a função do componente assíncrona para buscar dados
+export default async function HomePage() {
+  // Remova esta lógica:
+  // const latestPosts = [...mockPosts]
+  //   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  //   .slice(0, 3);
+
+  // Busque os posts recentes diretamente do Firestore
+  let recentPosts: Post[] = [];
+  try {
+    recentPosts = await getRecentPosts(10); // Busca 10 posts mais recentes
+  } catch (error) {
+    console.error("Error loading recent posts for carousel:", error);
+    // Você pode adicionar uma lógica para exibir uma mensagem de erro na UI aqui, se desejar.
+  }
+
 
   return (
     <div className="space-y-16">
       <section className="text-center py-12 bg-card shadow-xl rounded-lg overflow-hidden">
         {/* <div className="relative w-36 h-36 mx-auto mb-6">
-           <Image 
+           <Image
             src="https://picsum.photos/200/200?random=100"
             alt="Stásis UFRRJ Logo Concept"
             layout="fill"
@@ -80,7 +99,8 @@ export default function HomePage() {
         <h3 className="text-4xl font-semibold uppercase-ancient text-center mb-10 text-primary">
           Últimas Postagens
         </h3>
-        <PostCarousel posts={latestPosts} />
+        {/* Passe os posts do Firestore para o Carousel */}
+        <PostCarousel posts={recentPosts} />
       </section>
 
       <LaurelWreathSectionIcon />
