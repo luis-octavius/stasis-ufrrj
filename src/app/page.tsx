@@ -64,7 +64,7 @@ export default function HomePage() {
           ΣΤΑΣΙΣ <span className="text-accent">UFRRJ</span>
         </h2>
         <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-8 px-4">
-          Grupo de Estudos em Filosofia da Universidade Federal Rural do Rio de
+          Grupo de Pesquisa em Filosofia da Universidade Federal Rural do Rio de
           Janeiro.
         </p>
         <p className="text-lg text-foreground/70 max-w-2xl mx-auto px-4">
@@ -91,7 +91,7 @@ export default function HomePage() {
             Sobre o Grupo
           </h3>
           <p className="text-xl font-normal text-foreground/80 max-w-2xl mx-auto mb-4">
-            O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de estudos filosóficos
+            O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de pesquisa em filosofia
             da <strong>UFRRJ</strong> que investiga as dinâmicas do conflito
             político, tomando como eixo central o conceito grego de{" "}
             <em>stásis</em> – a guerra civil na Antiguidade clássica. Nosso
