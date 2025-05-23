@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 import { db, auth } from "../../../lib/firebase"; // Removed storage import
 import { collection, addDoc } from "firebase/firestore";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
-
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -23,7 +22,7 @@ export default function NewPostPage() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         console.log("No user logged in, redirecting to /login");
-        router.push('/login');
+        router.push("/login");
       } else {
         console.log("User logged in:", currentUser.uid);
         setUser(currentUser);
@@ -36,8 +35,15 @@ export default function NewPostPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || !user || loadingAuth) {
-        console.log("Submission blocked: isSubmitting =", isSubmitting, "user =", user, "loadingAuth =", loadingAuth);
-        return;
+      console.log(
+        "Submission blocked: isSubmitting =",
+        isSubmitting,
+        "user =",
+        user,
+        "loadingAuth =",
+        loadingAuth,
+      );
+      return;
     }
     setSubmitError(null); // Clear previous errors
     setIsSubmitting(true);
@@ -50,7 +56,12 @@ export default function NewPostPage() {
       console.log("Attempting to add document to Firestore...");
       const docRef = await addDoc(collection(db, "posts"), {
         title,
-        slug: slug || title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
+        slug:
+          slug ||
+          title
+            .toLowerCase()
+            .replace(/ /g, "-")
+            .replace(/[^\w-]+/g, ""),
         imageUrl: imageUrl, // Use the value from the imageUrl input
         content,
         createdAt: new Date(),
@@ -58,14 +69,16 @@ export default function NewPostPage() {
       });
       console.log("Document written with ID: ", docRef.id);
       console.log("Redirecting to /postagens/success...");
-      router.push('/postagens/success');
-    } catch (error: any) { // Explicitly type error
+      router.push("/postagens/success");
+    } catch (error: any) {
+      // Explicitly type error
       console.error("Error adding document to Firestore:", error);
       let errorMessage = "Falha ao criar postagem. Por favor, tente novamente.";
-      if (error.code === 'permission-denied') {
-          errorMessage = "Erro de Permissão: Você não tem permissão para criar postagens. Verifique suas regras de segurança do Firestore.";
+      if (error.code === "permission-denied") {
+        errorMessage =
+          "Erro de Permissão: Você não tem permissão para criar postagens. Verifique suas regras de segurança do Firestore.";
       } else if (error.message) {
-           errorMessage = `Erro no Firestore: ${error.message}`;
+        errorMessage = `Erro no Firestore: ${error.message}`;
       }
       setSubmitError(errorMessage);
     } finally {
@@ -87,7 +100,10 @@ export default function NewPostPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {submitError && <p className="text-red-500 text-sm text-red-500">{submitError}</p>} {/* Use submitError */}
+        {submitError && (
+          <p className="text-red-500 text-sm text-red-500">{submitError}</p>
+        )}{" "}
+        {/* Use submitError */}
         <div>
           <label
             htmlFor="title"
@@ -163,7 +179,8 @@ export default function NewPostPage() {
             disabled={isSubmitting || !user} // Disable if submitting or no user
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Criando Postagem..." : "Criar Postagem"} {/* Adjusted button text */}
+            {isSubmitting ? "Criando Postagem..." : "Criar Postagem"}{" "}
+            {/* Adjusted button text */}
           </button>
         </div>
       </form>

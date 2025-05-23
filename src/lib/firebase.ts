@@ -15,7 +15,7 @@ const firebaseConfig = {
   storageBucket: "stasis-ufrrj.firebasestorage.app",
   messagingSenderId: "144873138233",
   appId: "1:144873138233:web:47d7dbd1904c00cce245e8",
-  measurementId: "G-VKEXBXWDFT"
+  measurementId: "G-VKEXBXWDFT",
 };
 
 // Initialize Firebase

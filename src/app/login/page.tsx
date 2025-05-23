@@ -24,13 +24,15 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Login error:", error);
       // Display a user-friendly error message in Portuguese
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        setError('Email ou senha inválidos.');
-      } else if (error.code === 'auth/invalid-email') {
-        setError('Formato de email inválido.');
-      }
-       else {
-        setError('Falha ao fazer login. Por favor, tente novamente.');
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/wrong-password"
+      ) {
+        setError("Email ou senha inválidos.");
+      } else if (error.code === "auth/invalid-email") {
+        setError("Formato de email inválido.");
+      } else {
+        setError("Falha ao fazer login. Por favor, tente novamente.");
       }
     } finally {
       setIsLoading(false);
@@ -57,7 +59,8 @@ export default function LoginPage() {
               className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required            />
+              required
+            />
           </div>
           <div>
             <label
@@ -72,13 +75,17 @@ export default function LoginPage() {
               className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required            />
+              required
+            />
           </div>
           <div>
-            <button              type="submit"              className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            <button
+              type="submit"
+              className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               disabled={isLoading} // Disable button while loading
             >
-              {isLoading ? "Entrando..." : "Entrar"} {/* Texto do botão em português */}
+              {isLoading ? "Entrando..." : "Entrar"}{" "}
+              {/* Texto do botão em português */}
             </button>
           </div>
         </form>

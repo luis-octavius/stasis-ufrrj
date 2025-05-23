@@ -91,9 +91,9 @@ export default function HomePage() {
             Sobre o Grupo
           </h3>
           <p className="text-xl font-normal text-foreground/80 max-w-2xl mx-auto mb-4">
-            O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de pesquisa em filosofia
-            da <strong>UFRRJ</strong> que investiga as dinâmicas do conflito
-            político, tomando como eixo central o conceito grego de{" "}
+            O <strong>Stásis (ΣΤΆΣΙΣ)</strong> é um grupo de pesquisa em
+            filosofia da <strong>UFRRJ</strong> que investiga as dinâmicas do
+            conflito político, tomando como eixo central o conceito grego de{" "}
             <em>stásis</em> – a guerra civil na Antiguidade clássica. Nosso
             objetivo é articular o pensamento de filósofos como Platão e
             Aristóteles, que refletiram profundamente sobre a stásis, com as

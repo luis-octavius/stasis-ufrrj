@@ -9,7 +9,6 @@ import { auth } from "../../lib/firebase"; // Import auth
 import { onAuthStateChanged, signOut, User } from "firebase/auth"; // Import onAuthStateChanged, signOut, and User type
 import { useRouter } from "next/navigation"; // Import useRouter
 
-
 const GreekColumnIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +47,6 @@ type AuthLink = {
   action?: "logout"; // 'action' is optional and specifically 'logout' if present
 };
 
-
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,8 +61,8 @@ export default function Header() {
     { href: "#contato", label: "CONTATO" },
   ];
 
-   // Define authLinks with the specified type
-   const authLinks: AuthLink[] = user
+  // Define authLinks with the specified type
+  const authLinks: AuthLink[] = user
     ? [
         { href: "/logout", label: "SAIR", action: "logout" }, // Added action for logout
       ]
@@ -72,7 +70,6 @@ export default function Header() {
         { href: "/login", label: "LOGIN" },
         // { href: "/signup", label: "CADASTRO" }, // Uncomment if you have a signup page
       ];
-
 
   const handleScrollToFooter = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -89,15 +86,14 @@ export default function Header() {
     try {
       await signOut(auth);
       setUser(null); // Clear user state
-      router.push('/login'); // Redirect to login page after logout
+      router.push("/login"); // Redirect to login page after logout
     } catch (error) {
       console.error("Logout error:", error);
       // Handle logout error, e.g., show a message
     } finally {
-       if (isMenuOpen) setIsMenuOpen(false); // Close mobile menu after logout
+      if (isMenuOpen) setIsMenuOpen(false); // Close mobile menu after logout
     }
   };
-
 
   useEffect(() => {
     // Listen for authentication state changes
@@ -112,11 +108,10 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-        window.removeEventListener("scroll", handleScroll);
-        unsubscribe(); // Clean up the auth state listener
-    }
+      window.removeEventListener("scroll", handleScroll);
+      unsubscribe(); // Clean up the auth state listener
+    };
   }, [auth]); // Added auth to dependencies
-
 
   return (
     <header
@@ -150,21 +145,20 @@ export default function Header() {
             ))}
             {/* Add authentication-dependent links */}
             {authLinks.map((link) => (
-                <Link
-                    key={link.label}
-                    href={link.href}
-                     onClick={link.action === "logout" ? handleLogout : () => {}}
-                     className={`uppercase-ancient text-sm font-medium transition-all duration-200 hover:text-accent hover:scale-105 ${
-                        pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
-                            ? "text-accent scale-110 border-b-2 border-accent"
-                            : "text-foreground"
-                     }`}
-                >
-                    {link.label}
-                </Link>
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={link.action === "logout" ? handleLogout : () => {}}
+                className={`uppercase-ancient text-sm font-medium transition-all duration-200 hover:text-accent hover:scale-105 ${
+                  pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
+                    ? "text-accent scale-110 border-b-2 border-accent"
+                    : "text-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
             ))}
           </nav>
-
 
           <div className="flex items-center gap-4">
             <div className="hidden md:block">
@@ -204,25 +198,29 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-            {/* Add authentication-dependent links for mobile menu */}
-            {authLinks.map((link) => (
-                <Link
-                    key={link.label}
-                    href={link.href}
-                     onClick={link.action === "logout" ? handleLogout : () => setIsMenuOpen(false)} // Close menu on click unless logout
-                     className={`uppercase-ancient text-lg font-medium transition-colors hover:text-accent ${
-                        pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
-                            ? "text-accent"
-                            : "text-foreground"
-                     }`}
-                >
-                    {link.label}
-                </Link>
-            ))}
-             {/* Theme Toggle for Mobile */}
-             <div className="md:hidden">
-                <ThemeToggle />
-             </div>
+          {/* Add authentication-dependent links for mobile menu */}
+          {authLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={
+                link.action === "logout"
+                  ? handleLogout
+                  : () => setIsMenuOpen(false)
+              } // Close menu on click unless logout
+              className={`uppercase-ancient text-lg font-medium transition-colors hover:text-accent ${
+                pathname === link.href && link.href !== "/logout" // Fix: Don't highlight /logout as active
+                  ? "text-accent"
+                  : "text-foreground"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          {/* Theme Toggle for Mobile */}
+          <div className="md:hidden">
+            <ThemeToggle />
+          </div>
         </nav>
       </div>
     </header>

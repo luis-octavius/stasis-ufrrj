@@ -1,10 +1,20 @@
 // src/lib/integrantes.ts
 
-import { db } from '../lib/firebase'; // Adjust path as needed
-import { Member } from '../lib/types'; // Adjust path as needed
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, DocumentData } from 'firebase/firestore';
+import { db } from "../lib/firebase"; // Adjust path as needed
+import { Member } from "../lib/types"; // Adjust path as needed
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  DocumentData,
+} from "firebase/firestore";
 
-const integrantesCollection = collection(db, 'integrantes');
+const integrantesCollection = collection(db, "integrantes");
 
 /**
  * Fetches all members from Firestore, ordered by name.
@@ -12,9 +22,9 @@ const integrantesCollection = collection(db, 'integrantes');
  */
 export const getMembers = async (): Promise<Member[]> => {
   try {
-    const q = query(integrantesCollection, orderBy('name', 'asc'));
+    const q = query(integrantesCollection, orderBy("name", "asc"));
     const querySnapshot = await getDocs(q);
-    const members: Member[] = querySnapshot.docs.map(doc => {
+    const members: Member[] = querySnapshot.docs.map((doc) => {
       const data = doc.data() as DocumentData; // Cast to DocumentData to access fields safely
       return {
         id: doc.id,
@@ -27,7 +37,7 @@ export const getMembers = async (): Promise<Member[]> => {
     });
     return members;
   } catch (error) {
-    console.error('Error fetching members:', error);
+    console.error("Error fetching members:", error);
     throw error; // Re-throw the error for handling in the component
   }
 };
@@ -37,13 +47,15 @@ export const getMembers = async (): Promise<Member[]> => {
  * @param memberData - The member data to add (excluding id).
  * @returns A promise that resolves to the ID of the newly created document.
  */
-export const addMember = async (memberData: Omit<Member, 'id'>): Promise<string> => {
+export const addMember = async (
+  memberData: Omit<Member, "id">,
+): Promise<string> => {
   try {
     const docRef = await addDoc(integrantesCollection, memberData);
-    console.log('New member added with ID:', docRef.id);
+    console.log("New member added with ID:", docRef.id);
     return docRef.id;
   } catch (error) {
-    console.error('Error adding member:', error);
+    console.error("Error adding member:", error);
     throw error;
   }
 };
@@ -54,11 +66,14 @@ export const addMember = async (memberData: Omit<Member, 'id'>): Promise<string>
  * @param memberData - The partial member data to update.
  * @returns A promise that resolves when the update is complete.
  */
-export const updateMember = async (id: string, memberData: Partial<Omit<Member, 'id'>>): Promise<void> => {
+export const updateMember = async (
+  id: string,
+  memberData: Partial<Omit<Member, "id">>,
+): Promise<void> => {
   try {
-    const memberDocRef = doc(db, 'integrantes', id);
+    const memberDocRef = doc(db, "integrantes", id);
     await updateDoc(memberDocRef, memberData);
-    console.log('Member updated with ID:', id);
+    console.log("Member updated with ID:", id);
   } catch (error) {
     console.error(`Error updating member ${id}:`, error);
     throw error;
@@ -72,9 +87,9 @@ export const updateMember = async (id: string, memberData: Partial<Omit<Member, 
  */
 export const deleteMember = async (id: string): Promise<void> => {
   try {
-    const memberDocRef = doc(db, 'integrantes', id);
+    const memberDocRef = doc(db, "integrantes", id);
     await deleteDoc(memberDocRef);
-    console.log('Member deleted with ID:', id);
+    console.log("Member deleted with ID:", id);
   } catch (error) {
     console.error(`Error deleting member ${id}:`, error);
     throw error;
