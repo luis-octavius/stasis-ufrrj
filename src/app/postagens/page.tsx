@@ -68,7 +68,7 @@ export default function PostsPage() {
       if (lastVisible) {
         postsQuery = query(baseQuery, startAfter(lastVisible));
       } else {
-        // initial load
+        // initial load - NO startAfter
         postsQuery = baseQuery;
       }
 
@@ -104,7 +104,15 @@ export default function PostsPage() {
       if (postsData.length > 0) {
         lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
         setLastVisible(lastDoc);
-        setPosts((prevPosts) => [...prevPosts, ...postsData]); // Append new posts
+
+        // FIX: If it's the initial load (lastVisible is null), replace the posts array.
+        // Otherwise, append the new posts.
+        if (!lastVisible) {
+          setPosts(postsData); // Replace existing posts
+        } else {
+          setPosts((prevPosts) => [...prevPosts, ...postsData]); // Append new posts
+        }
+
 
         // Check if there are more posts AFTER the last loaded document
         const nextQuery = query(
@@ -120,8 +128,9 @@ export default function PostsPage() {
         setHasMore(false);
         if (!lastVisible) {
           // If it was the initial fetch and no posts
-          setPosts([]);
+          setPosts([]); // Ensure the array is empty on initial load with no data
         }
+         // If it's a load more and no new posts, just set hasMore(false)
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
